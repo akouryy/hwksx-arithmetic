@@ -22,27 +22,35 @@
 </template>
 
 <script>
+import L from 'lodash';
+
 export default {
   props: {
     kinds: {
       type: Array,
       required: true,
     },
-    settings: {
-      type: Object,
-      required: true,
-    },
   },
   data() {
     return {
       ns: '',
+      settings: {
+        ns: [],
+        kindID: 0,
+      },
     };
   },
   watch: {
     ns(val) {
-      console.log(val);
       this.settings.ns = val.split(/\D+/).reverse()
         .map(x => parseInt(x, 10)).filter(x => !isNaN(x));
+    },
+
+    settings: {
+      deep: true,
+      handler(val) {
+        this.$emit('seted', L.clone(val));
+      },
     },
   },
   methods: {

@@ -1,6 +1,6 @@
 <template>
   <div class="Add">
-    <AddSettings :settings="settings" :kinds="kinds"/>
+    <AddSettings :kinds="kinds" @seted="settings = $event"/>
 
     <div v-if="circuit">
       {{ circuit.wires.join('; ') }}<br>
@@ -8,14 +8,14 @@
       &lt;- MSB ... LSB -&gt;
       <div class="Add_NssContainer">
         <div class="Add_Nss">
-          <div v-for="ns in circuit.nss_raw" :key="ns" class="Add_Ns">
+          <div v-for="ns in circuit.nss_raw" :key="`add-nss_raw-${ns.join('-')}`" class="Add_Ns">
             {{ ns.reverse() }}
           </div>
         </div>
       </div>
       <div class="Add_NssContainer">
         <div class="Add_Nss">
-          <div v-for="ns in circuit.nss" :key="ns" class="Add_Ns">
+          <div v-for="ns in circuit.nss" :key="`add-nss-${ns.join('-')}`" class="Add_Ns">
             {{ ns.reverse() }}
           </div>
         </div>
@@ -32,20 +32,21 @@ export default {
   components: {
     AddSettings,
   },
+
   data() {
     return {
       kinds: [
         { id: 0, text: 'unsigned', signed: false },
-        { id: 1, text: 'signed', signed: true },
+        // { id: 1, text: 'signed', signed: true },
       ],
-      settings: {
-        ns: [],
-        kindID: 0,
-      },
+      settings: null,
     };
   },
+
   computed: {
     circuit() {
+      if(!this.settings) return null;
+
       try {
         if(this.settings.ns.length > 0) {
           const { signed } = this.kinds[this.settings.kindID];
@@ -58,6 +59,7 @@ export default {
       }
     },
   },
+
   methods: {},
 };
 </script>
