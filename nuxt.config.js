@@ -1,4 +1,8 @@
-const pkg = require('./package')
+const pkg = require('./package');
+
+const routerBase = process.env.DEPLOY_ENV === 'GH_PAGES' ? {
+  base: '/hwksx-arithmetic/',
+} : {};
 
 module.exports = {
   mode: 'spa',
@@ -43,6 +47,16 @@ module.exports = {
   */
   modules: [
   ],
+
+  generate: {
+    dir: 'docs',
+  },
+
+  router: {
+    ...routerBase,
+  },
+
+  // rootDir: 'hwksx-arithmetic',
 
   /*
   ** Build configuration
